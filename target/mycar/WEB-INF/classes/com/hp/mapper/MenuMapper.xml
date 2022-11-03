@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hp.mapper.MenuMapper">
+
+    <!--查询所有-->
+    <select id="findAll" resultType="menu" parameterType="menu">
+        select * from sys_menu
+        <where>
+            <if test="available!=null">
+                and available=#{available}
+            </if>
+            <if test="title!=null and title!='' ">
+                and title like concat("%",#{title},"%")
+            </if>
+        </where>
+    </select>
+    <!--添加-->
+    <insert id="addMenu" parameterType="menu" >
+        insert into sys_menu(pid,title,href,spread,target,icon,available)
+        values (#{pid},#{title},#{href},#{spread},#{target},#{icon},#{available})
+    </insert>
+    <!--修改-->
+    <update id="updateMenu" parameterType="menu">
+        update  sys_menu set
+            pid=#{pid},title=#{title},href=#{href},spread=#{spread},target=#{target},icon=#{icon},available=#{available}
+        where
+        id=#{id}
+    </update>
+    <!--根据pid查询子节点-->
+    <select id="findByPid" parameterType="int" resultType="int">
+        select count(*) from sys_menu where pid=#{pid}
+    </select>
+    <!--伪删除-->
+    <delete id="deleteMenu" parameterType="int">
+        delete from sys_menu where id=#{id}
+    </delete>
+</mapper>
